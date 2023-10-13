@@ -1,8 +1,8 @@
 {
-  "name": "Acorn Browser",
-  "productName": "Acorn Browser",
-  "version": "1.0",
-  "description": "Fast, Simple, and beautiful web browser.",
+  "name": "AcornBrowser",
+  "productName": "AcornBrowser",
+  "version": "3.8.1",
+  "description": "A private, fast, and beautiful web browser.",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -20,15 +20,15 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "icon": "./appicons/acorn",
-        "name": "Acorn Browser",
-        "executableName": "Acorn Browser"
+        "icon": "./appicons/AcornBrowser",
+        "name": "AcornBrowser",
+        "executableName": "AcornBrowser"
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "Acorn Browser"
+            "name": "AcornBrowser"
           }
         },
         {
@@ -60,7 +60,7 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
     "@electron-forge/maker-zip": "^6.0.0-beta.64",
     "concurrently": "^7.2.2",
-    "electron": "19.0.4",
+    "electron": "27.0.0",
     "electron-reloader": "^1.2.3",
     "tailwindcss": "^3.1.3"
   }
