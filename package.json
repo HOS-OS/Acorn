@@ -15,7 +15,7 @@
     "tailwind": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.css --minify --watch"
   },
   "keywords": [],
-  "author": "MystPi",
+  "author": "Hunter M Null",
   "license": "MIT",
   "config": {
     "forge": {
