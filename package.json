@@ -20,7 +20,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "icon": "./appicons/AcornBrowser",
+        "icon": "./appicons/acorn",
         "name": "AcornBrowser",
         "executableName": "AcornBrowser"
       },
