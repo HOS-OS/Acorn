@@ -45,7 +45,7 @@
           "config": {
             "icon": "./appicons/acorn.png"
           }
-        },
+        }
         {
           "name": "@electron-forge/maker-rpm",
           "config": {}
