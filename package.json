@@ -1,7 +1,7 @@
 {
   "name": "AcornBrowser",
   "productName": "AcornBrowser",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A private, fast, and beautiful web browser.",
   "main": "src/index.js",
   "scripts": {
@@ -12,7 +12,12 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "dev": "concurrently -k npm:start npm:tailwind",
-    "tailwind": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.css --minify --watch"
+    "tailwind": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.css --minify --watch",
+    "dist": "npm run dist:mac && npm run dist:arm-mac && npm run dist:win64 && npm run dist:linux",
+    "dist:mac": "electron-forge make --platform=darwin --arch=x64",
+    "dist:arm-mac": "electron-forge make --platform=darwin --arch=arm64",
+    "dist:win64": "electron-forge make --platform=win32 --arch=x64",
+    "dist:linux": "electron-forge make --platform=linux --arch=x64"
   },
   "keywords": [],
   "author": "Hunter M Null",
@@ -33,9 +38,7 @@
         },
         {
           "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
+          "platforms": ["darwin"]
         },
         {
           "name": "@electron-forge/maker-deb",
