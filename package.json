@@ -38,14 +38,16 @@
         },
         {
           "name": "@electron-forge/maker-zip",
-          "platforms": ["darwin"]
+          "platforms": [
+            "darwin"
+          ]
         },
         {
           "name": "@electron-forge/maker-deb",
           "config": {
             "icon": "./appicons/acorn.png"
           }
-        }
+        },
         {
           "name": "@electron-forge/maker-rpm",
           "config": {}
