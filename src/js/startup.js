@@ -6,7 +6,7 @@ fetch('../package.json')
     fetch('https://api.github.com/repos/HOS-OS/Acorn/releases/latest')
       .then(res => res.json())
       .then(res => {
-        if (res.tag_name !== 'v' + version) {
+        if (res.tag_name !== 'V' + version) {
           byId('update-available-version').innerText = res.tag_name.slice(1);
           byId('update-available').style.display = 'block';
         }

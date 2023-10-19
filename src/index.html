@@ -9,7 +9,7 @@
   </head>
   <body class="h-screen p-0 m-0">
     <!-- Update available alert -->
-    <div id="update-available" data-link-prefix="home" data-link="download" class="fixed z-20 hidden max-w-xl px-4 py-2 text-yellow-800 transition bg-yellow-100 border border-yellow-200 rounded-lg cursor-pointer top-24 left-6 right-6 sm:left-0 sm:right-0 sm:mx-auto"><span class="font-bold text-yellow-600">Version <span id="update-available-version"></span> of Acorn Browser is out!</span> Click here to download the latest version.</div>
+    <div id="update-available" data-link-prefix="home" data-link="download.html" class="fixed z-20 hidden max-w-xl px-4 py-2 text-yellow-800 transition bg-yellow-100 border border-yellow-200 rounded-lg cursor-pointer top-24 left-6 right-6 sm:left-0 sm:right-0 sm:mx-auto"><span class="font-bold text-yellow-600">Version <span id="update-available-version"></span> of Acorn Browser is out!</span> Click here to download the latest version.</div>
 
     <!-- Right-click menu -->
     <div id="menu" class="fixed z-20 flex-col hidden w-32 py-2 bg-white border border-gray-100 rounded shadow glass">
@@ -49,7 +49,8 @@
 
         <!-- Custom UA -->
         <p class="mb-2 font-bold text-gray-700">User agent</p>
-        <input id="settings-ua" type="text" placeholder="" class="bg-cyan-50 text-black-500 rounded-full outline-none text-sm px-4 py-0.5 mb-8 transition hover:bg-cyan-100 placeholder:text-black-400 w-full">
+        <input id="settings-ua" type="text" placeholder="" class="bg-cyan-50 text-black-500 rounded-full outline-none text-sm px-4 py-0.5 mb-8 transition hover:bg-cyan-100 placeholder:text-black-400 w-full" readonly>
+
 
         <!-- Open bookmarks in new tab -->
         <div class="flex mb-8">

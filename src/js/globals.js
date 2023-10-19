@@ -14,7 +14,7 @@ const click = (id, cb) => byId(id).addEventListener('click', (e) => {
 });
 
 /** The default home page for Acorn Browser */
-const defaultHome = 'https://duckduckgo.com';
+const defaultHome = 'https://hos-os.github.io/AcronSearch/';
 
 /** Acorn Browser' GitHub repository */
 const githubRepo = 'https://github.com/HOS-OS/Acorn/';
