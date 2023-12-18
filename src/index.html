@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Acorn Browser</title>
-    <link rel="stylesheet" href="./roboto/roboto.css">
-    <link rel="stylesheet" href="./tailwind.css">
-    <script src="./js/sortable.js"></script>
-  </head>
-  <body class="h-screen p-0 m-0">
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Acorn Browser</title>
+  <link rel="stylesheet" href="./roboto/roboto.css">
+  <link rel="stylesheet" href="./tailwind.css">
+  <script src="./js/sortable.js"></script>
+</head>
+
+<body class="h-screen p-0 m-0 dark:bg-gray-800 dark:text-white" id="body">
     <!-- Update available alert -->
     <div id="update-available" data-link-prefix="home" data-link="download.html" class="fixed z-20 hidden max-w-xl px-4 py-2 text-yellow-800 transition bg-yellow-100 border border-yellow-200 rounded-lg cursor-pointer top-24 left-6 right-6 sm:left-0 sm:right-0 sm:mx-auto"><span class="font-bold text-yellow-600">Version <span id="update-available-version"></span> of Acorn Browser is out!</span> Click here to download the latest version.</div>
 
@@ -27,11 +29,11 @@
 
     <!-- Settings menu -->
     <div id="settings" class="fixed z-30 hidden w-full h-full bg-black/10">
-      <div class="relative px-8 py-8 mx-8 -translate-y-1/2 bg-white glass rounded-lg sm:max-w-xl sm:mx-auto top-1/2 max-h-[calc(100vh-4rem)] overflow-auto no-scrollbar">
+      <div class="relative px-8 py-8 mx-8 -translate-y-1/2 bg-white dark:bg-gray-800 dark:bg-opacity-75 glass rounded-lg sm:max-w-xl sm:mx-auto top-1/2 max-h-[calc(100vh-4rem)] overflow-auto no-scrollbar">
         <h2 class="mb-8 text-4xl font-black text-gray-700">Acorn <span class="text-cyan-500">Settings</span></h2>
 
         <!-- Search Engine -->
-        <p class="mb-2 font-bold text-gray-700">Search engine URL</p>
+        <p class="mb-2 font-bold text-gray-700 dark:text-white">Search engine URL</p>
         <div class="flex items-center mb-8 space-x-2">
           <input id="settings-searchurl" type="text" placeholder="https://duckduckgo.com?q= (default)" class="bg-cyan-50 text-black-500 rounded-full outline-none text-sm px-4 py-0.5 transition hover:bg-cyan-100 placeholder:text-black-400 w-full">
           <select id="settings-presets" class="appearance-none px-4 py-0.5 rounded-full bg-cyan-500 text-white font-bold outline-none text-sm" name="" id="">
@@ -44,23 +46,30 @@
         </div>
 
         <!-- Homepage -->
-        <p class="mb-2 font-bold text-gray-700">Homepage</p>
+        <p class="mb-2 font-bold text-gray-700 dark:text-white">Homepage</p>
         <input id="settings-homepage" type="text" placeholder="Leave blank for the default (recommended)" class="bg-cyan-50 text-black-500 rounded-full outline-none text-sm px-4 py-0.5 mb-8 transition hover:bg-cyan-100 placeholder:text-black-400 w-full">
 
         <!-- Custom UA -->
-        <p class="mb-2 font-bold text-gray-700">User agent</p>
+        <p class="mb-2 font-bold text-gray-700 dark:text-white">User agent</p>
         <input id="settings-ua" type="text" placeholder="" class="bg-cyan-50 text-black-500 rounded-full outline-none text-sm px-4 py-0.5 mb-8 transition hover:bg-cyan-100 placeholder:text-black-400 w-full" readonly>
 
 
         <!-- Open bookmarks in new tab -->
         <div class="flex mb-8">
-          <p class="font-bold text-gray-700">Open bookmarks in a new tab</p>
+          <p class="font-bold text-gray-700 dark:text-white">Open bookmarks in a new tab</p>
           <input id="settings-open-in-new-tab" class="ml-auto" type="checkbox" />
+        </div>
+        
+        
+        <!-- Enable Dark Mode -->
+        <div class="flex mb-8">
+          <p class="font-bold text-gray-700 dark:text-white">Enable Dark Mode</p>
+          <input id="dark-mode" class="ml-auto" type="checkbox" />
         </div>
 
         <div class="flex space-x-4">
           <button id="settings-done" class="flex-1 px-4 py-2 font-bold text-white transition bg-cyan-500 rounded-md hover:bg-cyan-600">Done</button>
-          <button id="settings-cancel" class="flex-1 px-4 py-2 font-bold text-black-500 transition rounded-md bg-cyan-50 hover:bg-cyan-100">Cancel</button>
+          <button id="settings-cancel" class="flex-1 px-4 py-2 font-bold transition rounded-md dark:text-black dark:bg-cyan-50 bg-cyan-100 hover:bg-cyan-200">Cancel</button>
         </div>
       </div>
     </div>
@@ -84,34 +93,33 @@
 
     <div class="flex flex-col h-full">
 
-      <!-- Tab bar with the "create tab" and "more menu" buttons -->
-      <div class="flex items-center px-4 mt-4">
-        <div id="tabbar" class="flex items-center flex-1 space-x-2 overflow-auto no-scrollbar"></div>
-        <button id="newtab-button" class="flex items-center justify-center ml-3 mr-3 transition rounded-full cursor-default w-7 h-7 hoverable"><img class="light-img" src="./icons/add.png" width="20" height="20"></button>
-        <button id="close" class="flex items-center justify-center mr-3 transition rounded-full cursor-default w-7 h-7 hoverable"><img class="light-img" src="./icons/close.png" width="20" height="20"></button>
-        <button id="more-button" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7 hoverable"><img class="light-img" src="./icons/more.png" width="20" height="20"></button>
+      <div class="flex items-center px-4 mt-4 dark:bg-gray-800 dark:text-white">
+        <div id="tabbar" class="flex items-center flex-1 space-x-2 overflow-auto no-scrollbar "></div>
+        <button id="newtab-button" class="flex items-center justify-center ml-3 mr-3 transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/add.png" width="20" height="20"></button>
+        <button id="close" class="flex items-center justify-center mr-3 transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/close.png" width="20" height="20"></button>
+        <button id="more-button" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/more.png" width="20" height="20"></button>
       </div>
 
       <!-- Dropdown "more menu" -->
-      <div id="more-menu" class="absolute z-20 hidden my-4 text-base list-none bg-white border border-gray-100 divide-y divide-gray-100 rounded shadow glass right-2 top-8">
-        <ul class="py-1" aria-labelledby="dropdown">
-          <li>
-            <button id="more-settings" class="block w-full px-4 py-2 text-sm text-left text-gray-700 cursor-default hover:bg-opacity-50 hover:bg-gray-100">Settings</button>
-            <button data-link-prefix="github" data-link class="block w-full px-4 py-2 text-sm text-left text-gray-700 cursor-default hover:bg-opacity-50 hover:bg-gray-100">GitHub</button>
-            <button data-link-prefix="github" data-link="issues/new" class="block w-full px-4 py-2 text-sm text-left text-gray-700 cursor-default hover:bg-opacity-50 hover:bg-gray-100">Give feedback</button>
-          </li>
-        </ul>
-      </div>
+<div id="more-menu" class="absolute z-20 hidden my-4 text-base list-none bg-white dark:bg-gray-800 border border-gray-100 divide-y divide-gray-100 rounded shadow glass right-2 top-8">
+  <ul class="py-1" aria-labelledby="dropdown">
+    <li>
+      <button id="more-settings" class="block w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-white cursor-default hover:bg-opacity-50 hover:bg-gray-100">Settings</button>
+      <button data-link-prefix="github" data-link class="block w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-white cursor-default hover:bg-opacity-50 hover:bg-gray-100">GitHub</button>
+      <button data-link-prefix="github" data-link="issues/new" class="block w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-white cursor-default hover:bg-opacity-50 hover:bg-gray-100">Give feedback</button>
+    </li>
+  </ul>
+</div>
 
       <!-- Utility bar (omnibox, back/forward buttons, etc.) -->
-      <div class="flex items-center flex-none px-4 py-2 space-x-3">
-        <button id="back" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7"><img class="light-img" src="./icons/back-ios.png" width="20" height="20"></button>
-        <button id="forward" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7"><img class="light-img" src="./icons/forward-ios.png" width="20" height="20"></button>
-        <button class="flex items-center justify-center cursor-default w-7 h-7"><img class="light-img" src="./icons/lock-closed.png" id="ssl" width="20" height="20"></button>
-        <input id="omnibox" type="text" class="rounded outline-none text-gray-700 pl-4 pr-7 py-0.5 flex-1 text-sm hover:transition bg-gray-100 box-border h-7 hover:bg-gray-200 focus:transition-none focus:outline focus:outline-gray-200 focus:outline-1 focus:outline-offset-[-1px] focus:bg-white" onfocus="this.select()"/>
-        <button id="reload" class="flex items-center justify-center transition rounded-r cursor-default w-7 h-7 hoverable" style="margin-left: -1.75rem;"><img class="light-img" src="./icons/reload.png" width="20" height="20"></button>
-        <button id="bookmark" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7 hoverable"><img class="light-img" src="./icons/heart_empty.png" width="20" height="20"></button>
-        <button id="bookmarks-button" class="flex items-center justify-center mr-3 transition rounded-full cursor-default w-7 h-7 hoverable"><img class="light-img" src="./icons/bookmarks.png" width="20" height="20"></button>
+      <div class="flex items-center flex-none px-4 py-2 space-x-3 dark:bg-gray-800 dark:text-white">
+        <button id="back" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/back-ios.png" width="20" height="20"></button>
+        <button id="forward" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/forward-ios.png" width="20" height="20"></button>
+        <button class="flex items-center justify-center cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/lock-closed.png" id="ssl" width="20" height="20"></button>
+        <input id="omnibox" type="text" class="rounded outline-none text-gray-700 pl-4 pr-7 py-0.5 flex-1 text-sm hover:transition bg-gray-100 box-border h-7 hover:bg-gray-200 focus:transition-none focus:outline focus:outline-gray-200 focus:outline-1 focus:outline-offset-[-1px] focus:bg-white dark:bg-gray-700 dark:text-white" onfocus="this.select()" />
+        <button id="reload" class="flex items-center justify-center transition rounded-r cursor-default w-7 h-7 hoverable dark:bg-transparent" style="margin-left: -1.75rem;"><img class="dark:invert" src="./icons/reload.png" width="20" height="20"></button>
+        <button id="bookmark" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7 hoverable dark:bg-transparent"><img class="dark:invert" src="./icons/heart_empty.png" width="20" height="20"></button>
+        <button id="bookmarks-button" class="flex items-center justify-center mr-3 transition rounded-full cursor-default w-7 h-7 hoverable dark:bg-transparent"><img class="dark:invert" src="./icons/bookmarks.png" width="20" height="20"></button>
       </div>
 
       <!-- View container -->
@@ -123,5 +131,16 @@
     <script src="./js/functions.js"></script>
     <script src="./js/listeners.js"></script>
     <script src="./js/startup.js"></script>
+  
+    <!-- Add the following script at the end of the file -->
+    <script>
+      const darkModeToggle = document.getElementById('dark-mode');
+  
+      darkModeToggle.addEventListener('change', () => {
+        document.body.classList.toggle('dark', darkModeToggle.checked);
+      });
+    </script>
+  
   </body>
-</html>
+  
+  </html>

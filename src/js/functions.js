@@ -311,3 +311,38 @@ function grayOut() {
     forward.classList.remove('hoverable');
   }
 }
+
+
+ // Function to set dark mode
+ function setDarkMode(isDarkMode) {
+  const root = document.documentElement;
+  if (isDarkMode) {
+    root.classList.add('dark');
+  } else {
+    root.classList.remove('dark');
+  }
+}
+
+// Function to handle dark mode toggle
+function handleDarkModeToggle() {
+  const darkModeToggle = document.getElementById('dark-mode');
+
+  // Check if dark mode is enabled in local storage
+  const isDarkModeEnabled = localStorage.getItem('darkMode') === 'true';
+
+  // Set initial state
+  setDarkMode(isDarkModeEnabled);
+  darkModeToggle.checked = isDarkModeEnabled;
+
+  // Add event listener for toggle change
+  darkModeToggle.addEventListener('change', () => {
+    const isChecked = darkModeToggle.checked;
+    setDarkMode(isChecked);
+
+    // Save state in local storage
+    localStorage.setItem('darkMode', isChecked);
+  });
+}
+
+// Call the function when the DOM is ready
+document.addEventListener('DOMContentLoaded', handleDarkModeToggle);
