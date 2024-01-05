@@ -187,8 +187,7 @@ function saveSettings() {
   localStorage.setItem('openInNewTab', openInNewTabElement.checked);
 }
 
-
-/** Open the bookmarks menu and load the bookmarks */
+/** add bookmarks to list and also ask for name for link */
 function openBookmarks() {
   let el = byId('bookmarks-container');
   while (el.firstChild) {
@@ -201,11 +200,11 @@ function openBookmarks() {
       let p = document.createElement('p');
       p.className = 'mb-2 overflow-hidden font-mono text-gray-700 whitespace-nowrap text-ellipsis';
       let img = document.createElement('img');
-      img.src = bookmark[0];
+      img.src = bookmark.icon; // Assuming bookmark.icon is the icon URL
       img.className = 'inline w-4 h-4 mr-4';
       let a = document.createElement('a');
-      a.setAttribute('data-link', bookmark[1]);
-      a.innerText = bookmark[1];
+      a.setAttribute('data-link', bookmark.link); // Accessing link property
+      a.innerText = `${bookmark.name} - ${bookmark.link}`; // Displaying name - link
       a.className = 'underline cursor-pointer';
       a.onclick = (e) => {
         if (openInNewTab === 'true') {
@@ -223,28 +222,17 @@ function openBookmarks() {
   byId('bookmarks').style.display = 'block';
 }
 
-
-/**
- * Set the heart icon to the correct state
- * @param {string} url - The URL to check
- */
+/** heart and unheart bookmarks */
 function fillHeart(url) {
-  let bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
-  let inBookmarks = false;
+  let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+  let isInBookmarks = bookmarks.some((bookmark) => bookmark.link === url);
   let el = byId('bookmark');
-  if (bookmarks) {
-    bookmarks.forEach((bookmark) => {
-      if (bookmark[1] === url) {
-        el.children[0].src = './icons/heart_filled.png';
-        inBookmarks = true;
-        return;
-      }
-    });
-  }
-  if (!inBookmarks) {
-    el.children[0].src = './icons/heart_empty.png';
-  }
+
+  console.log('Is in bookmarks:', isInBookmarks);
+
+  el.children[0].src = isInBookmarks ? './icons/heart_filled.png' : './icons/heart_empty.png';
 }
+
 
 
 /** Hide the right-click menu */

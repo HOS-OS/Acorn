@@ -193,26 +193,61 @@ click('bookmarks-close', () => {
 });
 
 
-click('bookmark', () => {
-  let bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
-  if (!bookmarks) {
-    bookmarks = [];
-  }
-  let ret = false;
-  bookmarks.forEach((bookmark) => {
-    if (bookmark[1] === view.getURL()) {
-      ret = true;
-      bookmarks.splice(bookmarks.indexOf(bookmark), 1);
-      localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-      fillHeart(view.getURL());
-      return;
-    }
-  });
-  if (ret) return;
-  bookmarks.push([favicon, view.getURL()]);
-  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-  fillHeart(view.getURL());
+// Assuming you have the addClickListener function defined as before
+const addClickListener = (id, cb) => byId(id).addEventListener('click', (e) => {
+  cb(e);
 });
+
+
+// this will help add bookmarks and also unadded them with a name 
+addClickListener('bookmark', () => {
+  const bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+  const currentURL = view.getURL();
+
+  const existingBookmarkIndex = bookmarks.findIndex((bookmark) => bookmark.link === currentURL);
+
+  if (existingBookmarkIndex !== -1) {
+    // Bookmark already exists, remove it
+    bookmarks.splice(existingBookmarkIndex, 1);
+
+    // Update local storage
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+
+    // Update the heart icon
+    fillHeart(currentURL);
+  } else {
+    // Bookmark doesn't exist, show the hidden form
+    const bookmarkForm = byId('bookmarkForm');
+    const saveBookmarkButton = byId('saveBookmarkButton');
+    const bookmarkNameInput = byId('bookmarkName');
+
+    // Show the hidden form
+    bookmarkForm.style.display = 'block';
+
+    saveBookmarkButton.addEventListener('click', () => {
+      const currentName = bookmarkNameInput.value;
+
+      if (!currentName) {
+        // Handle empty name
+        bookmarkForm.style.display = 'none';
+        return;
+      }
+
+      // Add the bookmark
+      bookmarks.push({ name: currentName, link: currentURL });
+
+      // Update local storage
+      localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+
+      // Update the heart icon
+      fillHeart(currentURL);
+
+      // Hide the form after saving
+      bookmarkForm.style.display = 'none';
+    });
+  }
+});
+
 
 
 /**

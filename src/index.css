@@ -46,6 +46,9 @@
   }
 
   .glass {
-    @apply bg-opacity-75 backdrop-blur-lg;
+    @apply backdrop-blur-lg bg-opacity-20;
+  
+    @media (prefers-color-scheme: dark) {
+      background-color: rgba(26, 32, 44, 0.8); /* Adjust color and opacity as needed */
+    }
   }
-}

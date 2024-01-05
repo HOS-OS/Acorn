@@ -2,23 +2,18 @@
 {
   "name": "AcornBrowser",
   "productName": "AcornBrowser",
-  "version": "1.2",
+  "version": "1.2.1",
   "description": "A private, fast, and Simple web browser.",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "premake": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.css --minify",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\"",
-    "dev": "concurrently -k npm:start npm:tailwind",
-    "tailwind": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.css --minify --watch",
-    "dist": "npm run dist:mac && npm run dist:arm-mac && npm run dist:win64 && npm run dist:linux",
-    "dist:mac": "electron-forge make --platform=darwin --arch=x64",
-    "dist:arm-mac": "electron-forge make --platform=darwin --arch=arm64",
-    "dist:win64": "electron-forge make --platform=win32 --arch=x64",
-    "dist:linux": "electron-forge make --platform=linux --arch=x64"
+    "makeapp": "electron-forge make",
+    "signapp": "codesign --force --deep -s - out/make/Acorn Browser-1.2.1-arm64.dmg",
+    "build": "electron-packager . AcornBrowser --platform=darwin --arch=arm64 --out=dist --icon=/appicons/acorn.icns && npm run codesign",
+    "devrun": "concurrently -k npm:start npm:tailwind",
+    "tailwind": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.css --minify --watch"
   },
   "keywords": [],
   "author": "Hunter M Null",
@@ -27,47 +22,37 @@
     "forge": {
       "packagerConfig": {
         "icon": "./appicons/acorn.icns",
-        "name": "AcornBrowser",
+        "name": "Acorn Browser",
         "executableName": "AcornBrowser"
       },
       "makers": [
         {
-          "name": "@electron-forge/maker-squirrel",
+          "name": "@electron-forge/maker-dmg",
           "config": {
-            "name": "AcornBrowser"
+            "icon": "./appicons/acorn.icns"
           }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
         },
         {
           "name": "@electron-forge/maker-deb",
           "config": {
             "icon": "./appicons/acorn.png"
           }
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
         }
       ]
     }
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.64",
-    "@electron-forge/maker-deb": "^6.0.0-beta.64",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.64",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
-    "@electron-forge/maker-zip": "^6.0.0-beta.64",
-    "concurrently": "^7.2.2",
-    "electron": "27.1.3",
+    "@electron-forge/cli": "^7.2.0",
+    "@electron-forge/maker-deb": "^7.2.0",
+    "@electron-forge/maker-dmg": "^7.2.0",
+    "@electron/osx-sign": "^1.0.5",
+    "electron-installer-dmg": "^4.0.0",
+    "electron-builder": "^24.9.1",
+    "concurrently": "^8.2.2",
+    "electron": "28.1.1",
     "electron-reloader": "^1.2.3",
-    "tailwindcss": "^3.1.3"
+    "tailwindcss": "^3.4.0"
   }
 }
