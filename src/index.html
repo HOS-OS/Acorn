@@ -11,7 +11,17 @@
 
 <body class="h-screen p-0 m-0 dark:bg-gray-800 dark:text-white" id="body">
     <!-- Update available alert -->
-    <div id="update-available" data-link-prefix="home" data-link="download.html" class="fixed z-20 hidden max-w-xl px-4 py-2 text-yellow-800 transition bg-yellow-100 border border-yellow-200 rounded-lg cursor-pointer top-24 left-6 right-6 sm:left-0 sm:right-0 sm:mx-auto"><span class="font-bold text-yellow-600">Version <span id="update-available-version"></span> of Acorn Browser is out!</span> Click here to download the latest version.</div>
+   <div id="update-available" class="fixed z-20 hidden max-w-xl px-4 py-2 text-yellow-800 transition bg-yellow-100 border border-yellow-200 rounded-lg cursor-pointer top-24 left-6 right-6 sm:left-0 sm:right-0 sm:mx-auto">
+    <span class="font-bold text-yellow-600">Version <span id="update-available-version"></span> of Acorn Browser is out!</span> Click here to download the latest version.
+</div>
+
+<div id="update-available-updated" class="fixed z-30 hidden w-full h-full bg-black/10">
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 relative px-8 py-8 mx-8 -translate-y-1/3 bg-white dark:bg-gray-800 dark:bg-opacity-75 glass rounded-lg sm:max-w-xl sm:mx-auto top-1/2 max-h-[calc(100vh-4rem)] overflow-auto no-scrollbar">
+        <center><h2 class="mb-8 text-4xl font-black text-yellow-100">New Update Details</h2></center>
+        <div id="update-details" class="mb-6 text-lg text-gray-800 dark:text-gray-300 overflow-auto max-h-[20px]"></div>
+        <button id="update-close" class="flex-1 w-full px-4 py-2 font-bold text-black transition rounded-md dark:text-black dark:bg-cyan-50 bg-cyan-100 hover:bg-cyan-200 ">Close</button>
+      </div>
+</div>
 
     <!-- Right-click menu -->
     <div id="menu" class="fixed z-20 flex-col hidden w-32 py-2 bg-white dark:bg-gray-800 dark:bg-opacity-75 glass  border-gray-100 rounded shadow glass">
@@ -60,7 +70,22 @@
           <input id="settings-open-in-new-tab" class="ml-auto" type="checkbox" />
         </div>
         
+        <!-- Clear History -->
+          <p class="mb-2 font-bold text-gray-700 dark:text-white">Clear History</p>
+        <div class="flex items-center mb-8 space-x-2">
+          
+          <select id="clear-settings" class="appearance-none px-4 py-0.5 rounded-full text-black border-cyan-500 font-bold outline-1 text-sm">
+            <br>
+            <option class="text-sm text-gray-700 bg-white" value="hour">1 Hour</option>
+            <option class="text-sm text-gray-700 bg-white" value="">Default (1 Day)</option>
+            <option class="text-sm text-gray-700 bg-white" value="week">Week</option>
+            <option class="text-sm text-gray-700 bg-white" value="month">Month</option>
+            <option class="text-sm text-gray-700 bg-white" value="all">All</option>
+          </select>
+          <button  class="appearance-none px-4 py-0.5 rounded-full bg-cyan-500 text-white font-bold outline-none text-sm" id="clearhistory">Clear History Now</button>
+        </div>
         
+
         <!-- Enable Dark Mode -->
         <div class="flex mb-8">
           <p class="font-bold text-gray-700 dark:text-white">Enable Dark Mode</p>
@@ -84,7 +109,7 @@
 </div>
 
 <!-- Add a hidden form in your HTML -->
-<div id="bookmarkForm" style="display: none;" class="fixed z-30 hidden w-full h-full bg-black/10">
+<div id="bookmarkForm" class="fixed z-30 hidden w-full h-full bg-black/10">
   <div class="relative px-8 py-8 mx-8 -translate-y-1/e bg-white dark:bg-gray-800 dark:bg-opacity-75 glass rounded-lg sm:max-w-xl sm:mx-auto top-1/2 max-h-[calc(100vh-4rem)] overflow-auto no-scrollbar">
    <center><h2 class="mb-8 text-4xl font-black text-white-100">Name Your Bookmark</h2></center>
     <input type="text" id="bookmarkName" class="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:border-cyan-500 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
@@ -93,9 +118,20 @@
   </div>
 </div>
 
+
+<!-- History section -->
+<div id="history" class="fixed z-30 hidden w-full h-full bg-black/10">
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 relative px-8 py-8 mx-8 -translate-y-1/e bg-white dark:bg-gray-800 dark:bg-opacity-75 glass rounded-lg sm:max-w-xl sm:mx-auto top-1/2 max-h-[calc(100vh-4rem)] overflow-auto no-scrollbar">
+    <center><h2 class="mb-8 text-4xl font-black text-white-100">Your <span class="text-black-500">History</span><span class="text-black-500"> 📖</span></h2></center>
+    <div id="history-container" class="mb-6 text-1xl text-black text-white-100 overflow-auto max-h-[20px]"></div>
+    <button id="history-close" class="flex-1 w-full px-4 py-2 font-bold text-white transition bg-cyan-500 rounded-md hover:bg-cyan-600" onclick="toggleHistory()">Close</button>
+  </div>
+</div>
+
+
    <!-- No internet popup -->
-<div id="offline" class="fixed z-30 hidden w-full h-full bg-white dark:bg-gray-800 dark:bg-opacity-75 glass ">
-  <div class="relative px-8 py-8 mx-8 -translate-y-1/2 bg-white dark:bg-gray-800 dark:bg-opacity-75 glassrounded-lg sm:max-w-xl sm:mx-auto top-1/2 max-h-[calc(100vh-4rem)] overflow-auto no-scrollbar">
+<div id="offline" class="fixed z-30 hidden w-full h-full bg-white dark:bg-gray-800 dark:bg-opacity-75 glass">
+  <div class="relative px-8 py-8 mx-8 -translate-y-1/2 bg-white dark:bg-gray-800 dark:bg-opacity-75 glass rounded-lg sm:max-w-xl sm:mx-auto top-1/2 max-h-[calc(100vh-4rem)] overflow-auto no-scrollbar">
     <center><h2 class="mb-8 text-4xl text-gray-700 dark:text-white">No <span class="text-gray-700 dark:text-white">Internet</span> <span class="text-gray-700 dark:text-white">Connection</span> <span class="text-gray-700 dark:text-white"><br>¯\_(ツ)_/¯</span></h2></center>
     <center><p class="mb-8 text-gray-600">Try: <br>
       - Rebooting Your Computer <br>
@@ -103,15 +139,34 @@
       - Maybe Go Touch Some Grass
     </p></center>
     <button id="offline-retry" class="flex-1 w-full px-4 py-2 font-bold text-white transition bg-cyan-500 rounded-md hover:bg-cyan-600">Retry</button>
+    <br></br>
+    <button id="snake-game-btn" class="flex-1 w-full px-4 py-2 font-bold text-white transition bg-cyan-500 rounded-md hover:bg-cyan-600">Play Snake</button>
   </div>
 </div>
 
+<!-- Snake game popup -->
+<div id="snake-game-popup" class="fixed z-30 hidden w-full h-full bg-white dark:bg-gray-800 dark:bg-opacity-75 glass">
+  <div class="relative px-8 py-8 mx-8 -translate-y-1/2 bg-white dark:bg-gray-800 dark:bg-opacity-75 glass rounded-lg sm:max-w-xl sm:mx-auto top-1/2 max-h-[calc(100vh-4rem)] overflow-auto no-scrollbar">
+    <center><h2 class="mb-8 text-4xl font-black text-white-100">Snake <span class="text-black-500">Game</span></h2></center>
+    <iframe id="snake-game-iframe" src="snake.html" width="100%" height="500" frameborder="0" tabindex="0"></iframe>
+    <button id="snake-game-close" class="flex-1 w-full px-4 py-2 font-bold text-white transition bg-cyan-500 rounded-md hover:bg-cyan-600">Close Snake Game</button>
+  </div>
+</div>
+
+<!--SSL info Page-->
+<div id="sslInformation" class="fixed z-30 hidden w-full h-full bg-black/10">
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 relative px-8 py-8 mx-8 -translate-y-1/e bg-white dark:bg-gray-800 dark:bg-opacity-75 glass rounded-lg sm:max-w-xl sm:mx-auto top-1/2 max-h-[calc(100vh-4rem)] overflow-auto no-scrollbar">
+    <center><h2 class="mb-8 text-4xl font-black text-white-100">SSL Information</h2></center>
+    <div id="sslContainer" class="mb-6 text-1xl text-black text-white-100 overflow-auto max-h-[200px]"></div>
+    <button id="sslInformationClose" class="flex-1 w-full px-4 py-2 font-bold text-white transition bg-cyan-500 rounded-md hover:bg-cyan-600">Close</button>
+  </div>
+</div>
     <div class="flex flex-col h-full">
 
       <div class="flex items-center px-4 mt-4 dark:bg-gray-800 dark:text-white">
         <div id="tabbar" class="flex items-center flex-1 space-x-2 overflow-auto no-scrollbar "></div>
-        <button id="newtab-button" class="flex items-center justify-center ml-3 mr-3 transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/add.png" width="20" height="20"></button>
-        <button id="close" class="flex items-center justify-center mr-3 transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/close.png" width="20" height="20"></button>
+        <button id="newtab" class="flex items-center justify-center ml-3 mr-3 transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/add.png" width="20" height="20"></button>
+        <button id="tabclose" class="flex items-center justify-center mr-3 transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/close.png" width="20" height="20"></button>
         <button id="more-button" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/more.png" width="20" height="20"></button>
       </div>
 
@@ -120,6 +175,7 @@
   <ul class="py-1" aria-labelledby="dropdown">
     <li>
       <button id="more-settings" class="block w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-white cursor-default hover:bg-opacity-50 hover:bg-gray-100">Settings</button>
+      <button id="view-history" class="block w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-white cursor-default hover:bg-opacity-50 hover:bg-gray-100" onclick="toggleHistory()">View History</button>
       <button data-link-prefix="github" data-link class="block w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-white cursor-default hover:bg-opacity-50 hover:bg-gray-100">GitHub</button>
       <button data-link-prefix="github" data-link="issues/new" class="block w-full px-4 py-2 text-sm text-left text-gray-700 dark:text-white cursor-default hover:bg-opacity-50 hover:bg-gray-100">Give feedback</button>
     </li>
@@ -130,14 +186,10 @@
       <div class="flex items-center flex-none px-4 py-2 space-x-3 dark:bg-gray-800 dark:text-white">
         <button id="back" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/back-ios.png" width="20" height="20"></button>
         <button id="forward" class="flex items-center justify-center transition rounded-full cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/forward-ios.png" width="20" height="20"></button>
-        <button class="flex items-center justify-center cursor-default w-7 h-7 dark:bg-transparent"><img class="dark:invert" src="./icons/lock-closed.png" id="ssl" width="20" height="20"></button>
+        <button class="flex items-center justify-center cursor-pointer w-7 h-7 dark:bg-transparent" id="sslButton"><img class="dark:invert" src="./icons/lock-closed.png" id="ssl" width="20" height="20"></button>
         <input id="omnibox" type="text" class="rounded outline-none text-gray-700 pl-4 pr-7 py-0.5 flex-1 text-sm hover:transition bg-gray-100 box-border h-7 hover:bg-gray-200 focus:transition-none focus:outline focus:outline-gray-200 focus:outline-1 focus:outline-offset-[-1px] dark:bg-gray-700 dark:hover:bg-gray-700 dark:text-white" onfocus="this.select()" />
         <button id="reload" class="flex items-center justify-center transition rounded-r cursor-default w-7 h-7 hoverable dark:bg-transparent" style="margin-left: -1.75rem;"><img class="dark:invert" src="./icons/reload.png" width="20" height="20"></button>
-
-        <button id="bookmark" class="flex items-center justify-center transition rounded-full cursor-pointer w-7 h-7 hoverable dark:bg-transparent">
-          <img class="dark:invert" src="./icons/heart_empty.png" width="20" height="20">
-        </button>
-
+        <button id="bookmark" class="flex items-center justify-center transition rounded-full cursor-pointer w-7 h-7 hoverable dark:bg-transparent"><img class="dark:invert" src="./icons/heart_empty.png" width="20" height="20"></button>
         <button id="bookmarks-button" class="flex items-center justify-center mr-3 transition rounded-full cursor-default w-7 h-7 hoverable dark:bg-transparent"><img class="dark:invert" src="./icons/bookmarks.png" width="20" height="20"></button>
       </div>
 
@@ -150,6 +202,8 @@
     <script src="./js/functions.js"></script>
     <script src="./js/listeners.js"></script>
     <script src="./js/startup.js"></script>
+    <script src="./js/history.js"></script>
+
     
     
 

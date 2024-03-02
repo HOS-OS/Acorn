@@ -33,6 +33,7 @@ omnibox.addEventListener('keydown', (e) => {
       return;
     }
 
+
     if (/((https?:\/\/)?(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/.exec(val)) {
       if (val.startsWith('http://') || val.startsWith('https://')) {
         view.loadURL(val);
@@ -47,7 +48,7 @@ omnibox.addEventListener('keydown', (e) => {
         view.loadURL(defaultEngine + val);
       }
     }
-  }
+  } 
 });
 
 
@@ -66,13 +67,16 @@ byId('settings-presets').addEventListener('change', () => {
 });
 
 
-addEventListener('keydown', (e) => {
-  if (e.ctrlKey && e.key == 't') {
+
+// Add the event listener for keydown events
+document.addEventListener('keydown', (e) => {
+  if (e.metaKey && e.key === 't') {
     createTab();
-  } else if (e.ctrlKey && e.key == 'y') {
+  } else if (e.metaKey && e.key === 'w') {
     closeTab();
   }
 });
+
 
 
 click('update-available', () => {
@@ -80,9 +84,10 @@ click('update-available', () => {
 });
 
 
-click('newtab-button', () => {
+click('newtab', () => {
   createTab();
 });
+
 
 
 click('more-button', toggleMoreMenu);
@@ -107,7 +112,7 @@ click('reload', (e) => {
 });
 
 
-click('close', closeTab);
+click('tabclose', closeTab);
 
 
 click('menu-inspect', () => {
@@ -151,6 +156,8 @@ click('more-settings', openSettings);
 
 click('bookmarks-button', openBookmarks);
 
+click('view-history', toggleHistory);
+
 
 document.querySelectorAll('#more-menu>ul>li>button').forEach((button) => {
   button.addEventListener('click', toggleMoreMenu);
@@ -192,6 +199,15 @@ click('bookmarks-close', () => {
   byId('bookmarks').style.display = 'none';
 });
 
+
+click('history-close', () => {
+  byId('history').style.display = 'none';
+});
+
+
+click('update-close', () => {
+  byId('update-available-updated').style.display = 'none';
+});
 
 // Assuming you have the addClickListener function defined as before
 const addClickListener = (id, cb) => byId(id).addEventListener('click', (e) => {
@@ -250,6 +266,9 @@ addClickListener('bookmark', () => {
 
 
 
+
+
+
 /**
  * Add event listeners to a webview
  * @param {HTMLElement} view - The webview the event listeners will be added to
@@ -271,8 +290,36 @@ function addListenersToView(view, hash) {
       color: white !important;
       background: rgb(99, 102, 241) !important;
     }`);
-  });
+    
+// Log the URL along with date and time when the page stops loading
+var currentTimeAndDate = new Date();
 
+// Save the URL, time, and date to local storage as .json under the key 'savedURLs'
+saveURLtoLocalStorage(view.getURL(), currentTimeAndDate);
+
+// Function to save URL, time, and date to local storage as .json under the key 'savedURLs'
+function saveURLtoLocalStorage(url, timestamp) {
+  // Check if the URL is not the excluded one
+  if (url !== 'https://hos-os.github.io/AcronSearch/?v=false') {
+      // Format the time, date, and URL
+      var formattedTime = timestamp.getHours() + ':' + (timestamp.getMinutes() < 10 ? '0' : '') + timestamp.getMinutes();
+      var formattedDate = (timestamp.getMonth() + 1) + '/' + timestamp.getDate();
+      var formattedURL = url;
+
+      // Retrieve existing data from local storage (if any)
+      var existingData = JSON.parse(localStorage.getItem('savedURLs')) || [];
+
+      // Add the formatted time, date, and URL to the array
+      existingData.push(formattedTime + ', ' + formattedDate + ' , ' + formattedURL);
+
+      // Save the updated array back to local storage under the key 'savedURLs'
+      localStorage.setItem('savedURLs', JSON.stringify(existingData));
+  }
+}
+
+
+
+  });
 
   view.addEventListener('load-commit', (e) => {
     if (hash === activeHash && e.isMainFrame) {
@@ -326,3 +373,15 @@ function addListenersToView(view, hash) {
     }
   });
 }
+
+
+//ssl info page 
+const sslButton = document.getElementById('sslButton');
+sslButton.addEventListener('click', function() {
+  const sslInformationModal = document.getElementById('sslInformation');
+  sslInformationModal.classList.remove('hidden');
+});
+document.getElementById('sslInformation').classList.add('hidden');
+document.getElementById('sslInformationClose').addEventListener('click', () => {
+  document.getElementById('sslInformation').classList.add('hidden');
+});

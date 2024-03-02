@@ -228,8 +228,6 @@ function fillHeart(url) {
   let isInBookmarks = bookmarks.some((bookmark) => bookmark.link === url);
   let el = byId('bookmark');
 
-  console.log('Is in bookmarks:', isInBookmarks);
-
   el.children[0].src = isInBookmarks ? './icons/heart_filled.png' : './icons/heart_empty.png';
 }
 
@@ -264,19 +262,94 @@ function checkForDelTab(e, hash) {
 }
 
 
-/**
- * Check if a URL is https or http
- * @param {string} url - The URL to be checked
- */
-function checkSSL(url) {
-  if (url.slice(0, 8) === 'https://') {
-    ssl.setAttribute('src', './icons/lock-closed.png');
-    return true;
-  } else if (url.slice(0, 7) === 'http://') {
-    ssl.setAttribute('src', './icons/lock-open.png');
+
+
+
+
+async function checkSSL(url) {
+  try {
+    const response = await fetch(url);
+    const sslInfo = response.headers.get('strict-transport-security');
+    
+    // Show the SSL information modal
+    const sslInformationModal = document.getElementById('sslInformation');
+    const sslContainer = document.getElementById('sslContainer');
+    const ssl = document.getElementById('ssl');
+
+    if (sslInfo) {
+      // Parse max-age from SSL information
+      const maxAgeMatch = sslInfo.match(/max-age=(\d+)/);
+      const maxAgeSeconds = maxAgeMatch ? parseInt(maxAgeMatch[1]) : 0;
+      const maxAgeDays = Math.ceil(maxAgeSeconds / (60 * 60 * 24)); // Convert seconds to days and round up
+
+      // Parse other SSL attributes from SSL information
+      const includeSubdomains = /includeSubDomains/i.test(sslInfo);
+      const preload = /preload/i.test(sslInfo);
+      const redirect = /redirect/i.test(sslInfo);
+
+      // Check if SSL certificate has expired
+      const expirationDate = new Date(maxAgeSeconds * 1000 + Date.now());
+      const currentDate = new Date();
+
+      if (expirationDate < currentDate) {
+        // SSL certificate has expired
+        const errorMessage = `SSL certificate for ${url} has expired on ${expirationDate.toISOString()}`;
+        console.error(errorMessage);
+
+        // Update SSL indicator accordingly
+        sslContainer.innerHTML = `<span class="text-red-500">${errorMessage}</span>`;
+        ssl.setAttribute('src', './icons/lock-open.png');
+
+        // Log the error or handle it as needed
+        // For example, you can send this information to a server or log it in the console.
+      } else {
+        // SSL is valid
+        sslContainer.innerHTML = `
+          <span class="text-green-500">SSL is valid for ${url}</span><br>
+          <span>Include Subdomains: ${includeSubdomains}</span><br>
+          <span>Preload: ${preload}</span><br>
+          <span>Redirect from HTTP to HTTPS: ${redirect}</span><br>
+          <span>Max Age: ${maxAgeDays} days</span>
+        `;
+        ssl.setAttribute('src', './icons/lock-closed.png');
+        return true;
+      }
+    } else {
+      // No SSL Information found
+      sslContainer.innerHTML = `<span class="text-red-500">No SSL Information found for ${url}</span>`;
+      ssl.setAttribute('src', './icons/lock-open.png');
+      return false;
+    }
+  } catch (error) {
+    // Handle the error and update SSL indicator accordingly
+    const errorMessage = `Error fetching URL: ${error.message}`;
+    console.error(errorMessage);
+
+    const sslContainer = document.getElementById('sslContainer');
+    const ssl = document.getElementById('ssl');
+
+    sslContainer.innerHTML = `<span class="text-red-500">${errorMessage}</span>`;
+    ssl.setAttribute('src', './icons/error.png');
+
+    // Hide the SSL information modal in case of an error
+    const sslInformationModal = document.getElementById('sslInformation');
+    sslInformationModal.classList.add('hidden');
+    
+    // Log the error or handle it as needed
+    // For example, you can send this information to a server or log it in the console.
+
     return false;
   }
 }
+
+
+
+
+
+
+
+
+
 
 
 /** Gray out the back/forward buttons if the user can't go back/forward */
@@ -334,3 +407,91 @@ function handleDarkModeToggle() {
 
 // Call the function when the DOM is ready
 document.addEventListener('DOMContentLoaded', handleDarkModeToggle);
+
+
+// Function to check internet connectivity
+function isOnline() {
+  return navigator.onLine;
+}
+
+// Add event listener to show Snake game popup on button click
+document.getElementById('snake-game-btn').addEventListener('click', function() {
+  // Hide other popups if needed
+  document.getElementById('offline').style.display = 'none';
+
+  // Show Snake game popup
+  document.getElementById('snake-game-popup').style.display = 'block';
+});
+
+// Add event listener to close Snake game popup
+document.getElementById('snake-game-close').addEventListener('click', function() {
+  // Hide Snake game popup
+  document.getElementById('snake-game-popup').style.display = 'none';
+
+  // Show No Internet popup
+  document.getElementById('offline').style.display = 'block';
+});
+
+
+
+
+
+// Function to toggle the history section
+function toggleHistory() {
+  var historySection = document.getElementById('history');
+
+  // Retrieve and update the latest history from local storage
+  updateHistory();
+
+  // Toggle the visibility of the history section
+  historySection.classList.toggle('hidden');
+}
+
+// Function to update the history from local storage
+function updateHistory() {
+  var savedURLs = JSON.parse(localStorage.getItem('savedURLs'));
+  var historyContainer = document.getElementById('history-container');
+  historyContainer.innerHTML = ''; // Clear existing content
+
+  // Create an unordered list element
+  var ul = document.createElement('ul');
+
+  // Iterate through each entry and create list items with links and timestamps
+  savedURLs.forEach(function (urlWithTimestamp) {
+      var li = document.createElement('li');
+
+      // Split the timestamp and URL
+      var parts = urlWithTimestamp.split(', ');
+      var timestamp = parts.slice(0, 2).join(', '); // Use the first two parts for timestamp
+      var url = parts[2];
+
+      var link = document.createElement('a');
+
+      link.textContent = timestamp + ' - ' + url; // Display timestamp and URL
+      link.href = url; // Set the link's href attribute to the URL
+      link.target = '_blank'; // Open the link in a new tab
+
+      // Add a click event listener to the link
+      link.addEventListener('click', function (event) {
+          event.preventDefault();
+          openURLInNewTab(url); // Call a function to open the URL in a new tab
+      });
+
+      // Append the link to the list item
+      li.appendChild(link);
+      ul.appendChild(li);
+  });
+
+  // Append the list to the history-container
+  historyContainer.appendChild(ul);
+}
+
+// Add an event listener to the 'View History' button
+document.getElementById('view-history').addEventListener('click', function () {
+  toggleHistory();
+});
+
+// Function to open the URL in a new tab
+function openURLInNewTab(url) {
+  createTab(url); // Assuming createTab function opens the URL in a new tab
+}
