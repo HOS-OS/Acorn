@@ -1,27 +1,113 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 
+let mainWindow;
+let aboutWindow;
 
 const createWindow = () => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1400,
     height: 850,
     minHeight: 500,
     minWidth: 800,
     webPreferences: {
-      webviewTag: true
+      webviewTag: true,
+      nodeIntegration: true, // Ensure this is set if you're using `nodeIntegration` in `about.html`
+      contextIsolation: false,
     }
   });
 
-  // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
   mainWindow.setMenuBarVisibility(false);
+
+  // Create and set the application menu
+  const menu = Menu.buildFromTemplate(createMenuTemplate());
+  Menu.setApplicationMenu(menu);
+};
+
+const createMenuTemplate = () => {
+  return [
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'About',
+          click() {
+            if (aboutWindow) {
+              aboutWindow.focus();
+            } else {
+              createAboutWindow();
+            }
+          }
+        },
+        { type: 'separator' },
+        { role: 'quit' }
+      ]
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'selectall' }
+      ]
+    },
+    {
+      label: 'View',
+      submenu: [
+        { role: 'resetzoom' },
+        { role: 'zoomin' },
+        { role: 'zoomout' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' }
+      ]
+    },
+    {
+      label: 'Window',
+      submenu: [
+        { role: 'minimize' },
+        { role: 'zoom' },
+        { type: 'separator' },
+        { role: 'front' },
+        { type: 'separator' },
+        {
+          label: 'Close',
+          role: 'close',
+        }
+      ]
+    }
+  ];
+};
+
+const createAboutWindow = () => {
+  aboutWindow = new BrowserWindow({
+    width: 400,
+    height: 400,
+    modal: true,
+    parent: mainWindow,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+    frame: false, // Disable the default title bar
+    titleBarStyle: 'hidden', // Hide the native title bar
+    backgroundColor: '#fff' // Set a background color
+  });
+
+  aboutWindow.loadFile(path.join(__dirname, 'about.html'));
+
+  // Cleanup when the About window is closed
+  aboutWindow.on('closed', () => {
+    aboutWindow = null;
+  });
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -51,10 +137,7 @@ app.on('web-contents-created', function (event, contents) {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
-
 // Auto reload the app on files changes
 try {
-  require('electron-reloader')(module)
+  require('electron-reloader')(module);
 } catch (_) {}

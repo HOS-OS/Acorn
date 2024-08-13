@@ -106,7 +106,7 @@ function createTab(url) {
   if (uaValue) {
     view.useragent = uaValue;
   } else {
-    view.useragent = 'Acorn Browser/' + version;
+    view.useragent = 'Acorn Browser/1.3.1';
   }
 
   if (url) {
@@ -159,7 +159,7 @@ function openSettings() {
   searchurlElement.value = searchUrlValue;
   homepageElement.value = homePageValue;
   uaElement.value = uaValue;
-  uaElement.placeholder = 'Acorn Browser/' + version;
+  uaElement.placeholder = 'Acorn Browser/1.3.1';
   openInNewTabElement.checked = openInNewTab === 'true';
 
   settings.style.display = 'block';
@@ -495,3 +495,5 @@ document.getElementById('view-history').addEventListener('click', function () {
 function openURLInNewTab(url) {
   createTab(url); // Assuming createTab function opens the URL in a new tab
 }
+
+

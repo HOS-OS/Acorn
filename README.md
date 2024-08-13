@@ -16,7 +16,7 @@ cd Acorn
 npm install
 
 # Start the app
-npm run dev
+npm run devrun
 # This runs `npm start` and `npm run tailwind` concurrently
 ```
 
@@ -30,7 +30,7 @@ cd Acorn
 npm install
 
 # Make the app
-npm run make
+npm run build
 
 ```
 

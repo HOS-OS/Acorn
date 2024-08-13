@@ -2,11 +2,10 @@
 fetch('../package.json')
   .then(res => res.json())
   .then(res => {
-    version = res.version;
+    const version = res.version;
     createTab();
     const updateAvailableElement = document.getElementById('update-available');
     
-
     // Fetch latest release from GitHub
     fetch('https://api.github.com/repos/HOS-OS/Acorn/releases/latest')
       .then(res => res.json())
@@ -36,49 +35,50 @@ function handleUpdateAvailableClick(event) {
           const updateDetails = res.body; // Assuming GitHub API provides update details in the body field
           const updateDetailsElement = document.getElementById('update-details');
 
-          // Creating a dropdown for selecting Mac type
+          // Creating a dropdown for selecting Mac/PC type
           const dropdownHTML = `
               <select id="mac-type">
                   <option value="intel">Intel</option>
                   <option value="m1">M1</option>
+                  <option value="x64">PC (x64)</option> <!-- New x64 option -->
               </select>
           `;
 
           updateDetailsElement.innerHTML = `
               <p>${updateDetails}</p>
               <p></p>
-              <center><p>select version</p></center> 
+              <center><p>Select version:</p></center> 
               <p></p>
 
-             <center><p>Get ${dropdownHTML} Version </p></center>
-             <p></p>
+              <center><p>Get ${dropdownHTML} Version</p></center>
+              <p></p>
 
-             <button id="download-btn" class="flex-1 w-full px-4 py-2 font-bold text-white transition bg-cyan-500 rounded-md hover:bg-cyan-600">Download</button>
-
+              <button id="download-btn" class="flex-1 w-full px-4 py-2 font-bold text-white transition bg-cyan-500 rounded-md hover:bg-cyan-600">Download</button>
           `;
 
           // Adding click event listener to the download button
           document.getElementById('download-btn').addEventListener('click', () => {
-              const selectedMacType = document.getElementById('mac-type').value;
+              const selectedType = document.getElementById('mac-type').value;
               let downloadUrl;
 
-              // Determine the download URL based on the selected Mac type
-              if (selectedMacType === 'intel') {
+              // Determine the download URL based on the selected type
+              if (selectedType === 'intel') {
                   downloadUrl = getDownloadUrlForMacType(res.assets, 'Intel');
-              } else if (selectedMacType === 'm1') {
+              } else if (selectedType === 'm1') {
                   downloadUrl = getDownloadUrlForMacType(res.assets, 'M1');
+              } else if (selectedType === 'x64') {  // Handle x64 option
+                  downloadUrl = getDownloadUrlForMacType(res.assets, 'X64');
               }
 
               // Download the file
-if (downloadUrl) {
-    window.location.href = downloadUrl;
-    window.onunload = function() {
-        alert("File has been saved successfully!");
-    };
-} else {
-    console.error('Download URL not found for the selected Mac type.');
-}
-
+              if (downloadUrl) {
+                  window.location.href = downloadUrl;
+                  window.onunload = function() {
+                      alert("File has been saved successfully!");
+                  };
+              } else {
+                  console.error('Download URL not found for the selected type.');
+              }
           });
 
           // Show the update available message
@@ -90,15 +90,17 @@ if (downloadUrl) {
       });
 }
 
-// Function to get the download URL based on the Mac type
-function getDownloadUrlForMacType(assets, macType) {
-    return assets.find(asset => asset.name.includes(`Acorn.Browser.${macType}`))?.browser_download_url;
+// Function to get the download URL based on the type
+function getDownloadUrlForMacType(assets, type) {
+    return assets.find(asset => asset.name.includes(`Acorn.Browser.${type}`))?.browser_download_url;
 }
 
 // Add click event listener to the update available alert box
 document.addEventListener('DOMContentLoaded', function() {
   const updateAvailableAlert = document.getElementById('update-available');
-  updateAvailableAlert.addEventListener('click', handleUpdateAvailableClick);
+  if (updateAvailableAlert) {
+    updateAvailableAlert.addEventListener('click', handleUpdateAvailableClick);
+  }
 });
 
 // Initialize sortable tabs

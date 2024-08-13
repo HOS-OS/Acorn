@@ -1,48 +1,54 @@
-
 {
   "name": "AcornBrowser",
   "productName": "AcornBrowser",
-  "version": "1.3.0",
-  "description": "A private, fast, and Simple web browser.",
+  "version": "1.3.1",
+  "description": "A private, fast, and simple web browser.",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "premake": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.css --minify",
     "makeapp": "electron-forge make",
-    "signapp": "codesign --force --deep -s - out/make/Acorn Browser-1.3.0-arm64.dmg",
-    "build": "electron-packager . AcornBrowser --platform=darwin --arch=arm64 --out=dist --icon=/appicons/acorn.icns && npm run codesign",
+    "build": "electron-builder --mac --win --x64 --arm64",
+    "devbuild": "electron-builder --mac",
     "devrun": "concurrently -k npm:start npm:tailwind",
     "tailwind": "npx tailwindcss -i ./src/index.css -o ./src/tailwind.css --minify --watch"
   },
   "keywords": [],
   "author": "Hunter M Null",
   "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "icon": "./appicons/acorn.icns",
-        "name": "Acorn Browser",
-        "executableName": "AcornBrowser"
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-dmg",
-          "config": {
-            "icon": "./appicons/acorn.icns"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {
-            "icon": "./appicons/acorn.png"
-          }
-        }
-      ]
+  "build": {
+    "appId": "com.acornbrowser.app",
+    "productName": "AcornBrowser",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "appicons/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "tailwind.config.js"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "./appicons/acorn.icns"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "./appicons/acorn.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@electron-forge/cli": "^7.2.0",
     "@electron-forge/maker-deb": "^7.2.0",
@@ -51,7 +57,7 @@
     "electron-installer-dmg": "^4.0.0",
     "electron-builder": "^24.9.1",
     "concurrently": "^8.2.2",
-    "electron": "28.1.4",
+    "electron": "31.3.1",
     "electron-reloader": "^1.2.3",
     "tailwindcss": "^3.4.0"
   }
