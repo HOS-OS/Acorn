@@ -32,6 +32,8 @@ npm install
 # Make the app
 npm run build
 
+# building the app will make the Windows x64, Mac OS x64 & Arm64 installers.
+
 ```
 
 # furture ideas

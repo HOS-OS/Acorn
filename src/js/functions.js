@@ -106,7 +106,7 @@ function createTab(url) {
   if (uaValue) {
     view.useragent = uaValue;
   } else {
-    view.useragent = 'Acorn Browser/1.3.1';
+    view.useragent = 'Acorn Browser/1.3.2';
   }
 
   if (url) {
@@ -159,7 +159,7 @@ function openSettings() {
   searchurlElement.value = searchUrlValue;
   homepageElement.value = homePageValue;
   uaElement.value = uaValue;
-  uaElement.placeholder = 'Acorn Browser/1.3.1';
+  uaElement.placeholder = 'Acorn Browser/1.3.2';
   openInNewTabElement.checked = openInNewTab === 'true';
 
   settings.style.display = 'block';
